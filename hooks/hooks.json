@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start.js\"" } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Read", "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-read.js\"" } ] },
+      { "matcher": "Grep|Glob", "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-search.js\"" } ] },
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/trim-bash.js\"" } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Bash|Grep|Glob", "hooks": [ { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/nudge-output.js\"" } ] }
+    ]
+  }
+}
