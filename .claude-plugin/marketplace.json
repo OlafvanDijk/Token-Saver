@@ -1,0 +1,13 @@
+{
+  "name": "token-saver",
+  "description": "Zero-config token optimizer, Unity-aware, with a live savings counter.",
+  "owner": { "name": "OlafvanDijk" },
+  "plugins": [
+    {
+      "name": "token-saver",
+      "source": "./token-saver",
+      "description": "Zero-config token optimizer, Unity-aware, with a live savings counter.",
+      "version": "0.1.0"
+    }
+  ]
+}
