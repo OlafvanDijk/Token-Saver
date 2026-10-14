@@ -96,6 +96,7 @@ check('big output nudged', /token-saver/.test(hso(call('nudge-output.js',
   { cwd: plain, tool_name: 'Bash', tool_response: { stdout: big } })).additionalContext || ''));
 check('small output not nudged', call('nudge-output.js', { cwd: plain, tool_name: 'Bash', tool_response: { stdout: 'ok' } }).out === null);
 check('unity session text mentions unity-cli', /unity-cli/.test(hso(call('session-start.js', { cwd: unity, session_id: 's1' })).additionalContext || ''));
+check('subagent start injects guideline', hso(call('session-start.js', { cwd: plain, session_id: 's1', hook_event_name: 'SubagentStart' })).hookEventName === 'SubagentStart');
 check('generic session text has no unity', !/Unity/.test(hso(call('session-start.js', { cwd: plain, session_id: 's1' })).additionalContext || ''));
 const sl = spawnSync('node', [path.join(S, 'statusline.js')], {
   input: JSON.stringify({ session_id: 's1' }), encoding: 'utf8',
