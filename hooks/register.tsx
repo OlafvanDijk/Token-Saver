@@ -62,7 +62,8 @@ export const register: Register = on => {
 
     const label = ' ~' + fmt(total) + ' saved '
     const sign = ['┌' + '─'.repeat(label.length), '│' + label, '└' + '─'.repeat(label.length)]
-    const mascot = [' ▐▛███▜▌ ', '▝▜█████▛▘', ' █ █ █ █ ']
+    const nbsp = (row: string): string => row.replace(/ /g, ' ')
+    const mascot: string[] = [' ▐▛███▜▌ ', '▝▜█████▛▘', ' █ █ █ █ '].map(nbsp)
     const lift = (rows: string[]) => (up ? [' ', ...rows] : [...rows, ' '])
     const m = lift(mascot)
     const s3 = lift(sign)
