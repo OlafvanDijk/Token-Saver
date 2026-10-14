@@ -7,7 +7,7 @@
       "name": "token-saver",
       "source": "./",
       "description": "Zero-config token optimizer, Unity-aware, with a live savings counter.",
-      "version": "1.0.2"
+      "version": "1.0.3"
     }
   ]
 }
