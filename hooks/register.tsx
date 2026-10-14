@@ -61,8 +61,8 @@ export const register: Register = on => {
     const { Box, Text } = $.ui.resolve(e)
 
     const label = ' ~' + fmt(total) + ' saved '
-    const sign = ['┌' + '─'.repeat(label.length) + '┐', '│' + label + '│', '└' + '─'.repeat(label.length) + '┘']
-    const mascot = [' ▐▛███▜▌ ', '▝▜█████▛▘', '  ▀▀ ▀▀  ']
+    const sign = ['┌' + '─'.repeat(label.length), '│' + label, '└' + '─'.repeat(label.length)]
+    const mascot = [' ▐▛███▜▌ ', '▝▜█████▛▘', ' █ █ █ █ ']
     const lift = (rows: string[]) => (up ? [' ', ...rows] : [...rows, ' '])
     const m = lift(mascot)
     const s3 = lift(sign)
