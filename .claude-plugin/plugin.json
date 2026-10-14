@@ -1,6 +1,6 @@
 {
   "name": "token-saver",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Zero-config token optimizer: guards against oversized reads and noisy searches, Unity-aware, with a live savings counter.",
   "author": { "name": "OvanD" },
   "types": "./types/index.d.ts"
