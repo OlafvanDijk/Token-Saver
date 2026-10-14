@@ -1,11 +1,13 @@
 import { atom, read, update } from 'claude-code'
 import type { Engine, Register } from 'claude-code'
 
-// Shows "token-saver ~12.4k saved" in the band above the prompt (terminal and desktop).
+// Shows a jumping Claude mascot holding a "~12.4k saved" sign, thumbs up, above the prompt (terminal and desktop).
 // Figures come from the JSONL files scripts/stats.js appends to, ~/.claude/token-saver/stats.
 const saved = atom({ plugin: 'token-saver', key: 'total' } as const, 0)
 
 const REFRESH_MS = 3000
+const JUMP_MS = 500
+const frame = atom({ plugin: 'token-saver', key: 'frame' } as const, 0)
 
 const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n))
 const safe = (id: string) => String(id || 'unknown').replace(/[^\w-]/g, '_')
@@ -39,6 +41,7 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await load($)
     $.clock.every(REFRESH_MS, () => load($))
+    $.clock.every(JUMP_MS, () => update($, frame, (f: number) => 1 - f))
     return next(e)
   })
 
@@ -49,6 +52,7 @@ export const register: Register = on => {
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const total = await read($, saved)
+    const up = (await read($, frame)) === 1
 
     if (e.props.hasSurvey || total <= 0) {
       return next(e)
@@ -56,9 +60,23 @@ export const register: Register = on => {
 
     const { Box, Text } = $.ui.resolve(e)
 
+    const label = ' ~' + fmt(total) + ' saved '
+    const sign = ['┌' + '─'.repeat(label.length) + '┐', '│' + label + '│', '└' + '─'.repeat(label.length) + '┘']
+    const mascot = [' ▐▛███▜▌ ', '▝▜█████▛▘', '  ▘▘ ▝▝  ']
+    const lift = (rows: string[]) => (up ? ['', ...rows] : [...rows, ''])
+    const m = lift(mascot)
+    const s3 = lift(sign)
+    const thumb = lift(['', '👍', ''])
+
     return (
-      <Box>
-        <Text dimColor>token-saver ~{fmt(total)} saved</Text>
+      <Box flexDirection="column">
+        {m.map((row, i) => (
+          <Box key={i}>
+            <Text color="#D77757">{row.padEnd(11)}</Text>
+            <Text bold>{s3[i]}</Text>
+            <Text> {thumb[i]}</Text>
+          </Box>
+        ))}
       </Box>
     )
   })

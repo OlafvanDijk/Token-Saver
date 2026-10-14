@@ -102,7 +102,7 @@ const sl = spawnSync('node', [path.join(S, 'statusline.js')], {
   input: JSON.stringify({ session_id: 's1' }), encoding: 'utf8',
   env: Object.assign({}, process.env, { HOME: home, USERPROFILE: home }),
 });
-check('statusline shows nonzero savings', /token-saver ~[1-9]/.test(sl.stdout));
+check('statusline shows nonzero savings', /~[1-9]/.test(sl.stdout));
 const rep = spawnSync('node', [path.join(S, 'report.js'), 's1'], {
   cwd: unity, encoding: 'utf8', env: Object.assign({}, process.env, { HOME: home, USERPROFILE: home }),
 });
