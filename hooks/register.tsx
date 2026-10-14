@@ -69,14 +69,22 @@ export const register: Register = on => {
     const thumb = lift(['', '👍', ''])
 
     return (
-      <Box flexDirection="column">
-        {m.map((row, i) => (
-          <Box key={i}>
-            <Text color="#D77757">{row.padEnd(11)}</Text>
-            <Text bold>{s3[i]}</Text>
-            <Text> {thumb[i]}</Text>
-          </Box>
-        ))}
+      <Box>
+        <Box flexDirection="column" width={11}>
+          {m.map((row, i) => (
+            <Text key={i} color="#D77757">{row}</Text>
+          ))}
+        </Box>
+        <Box flexDirection="column">
+          {s3.map((row, i) => (
+            <Text key={i} bold>{row}</Text>
+          ))}
+        </Box>
+        <Box flexDirection="column" marginLeft={1}>
+          {thumb.map((row, i) => (
+            <Text key={i}>{row}</Text>
+          ))}
+        </Box>
       </Box>
     )
   })
