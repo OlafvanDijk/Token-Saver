@@ -25,6 +25,49 @@ const sum = (text: string) => {
   return total
 }
 
+// Desktop: the mascot and sign are drawn as SVG (text-glyph art can't be aligned there). Crab geometry follows
+// savvy-progress's pixel Clawd: a 30x28 grid, scaled by CRAB_SCALE.
+const CLAY = '#D97757'
+const INK = '#1F1E1D'
+const CRAB_SCALE = 1.5
+const SVG_H = 48
+
+const px = (x: number, y: number, w: number, h: number, fill: string, cls: string = ''): string =>
+  `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"${cls ? ` class="${cls}"` : ''}/>`
+
+const crabSvg = (text: string, boxW: number, W: number): string => {
+  const crab: string = [
+    `<g class="bd">`,
+    px(7, 10, 16, 12, CLAY),
+    px(3, 14, 4, 4, CLAY),
+    px(23, 14, 4, 4, CLAY),
+    px(9, 12, 2, 2, INK),
+    px(19, 12, 2, 2, INK),
+    `</g>`,
+    px(7, 22, 2, 4, CLAY, 'la'),
+    px(17, 22, 2, 4, CLAY, 'la'),
+    px(11, 22, 2, 4, CLAY, 'lb'),
+    px(21, 22, 2, 4, CLAY, 'lb'),
+  ].join('')
+  const bx: number = 48
+  const by: number = 10
+  const bh: number = 30
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${SVG_H}" viewBox="0 0 ${W} ${SVG_H}">
+<style>
+.t{fill:#1f1f1f}.ln{stroke:#1f1f1f}
+@media (prefers-color-scheme: dark){.t{fill:#ececec}.ln{stroke:#ececec}}
+.hop{animation:hop 1s ease-in-out infinite}
+.la{animation:st .5s steps(1) infinite}.lb{animation:st .5s steps(1) infinite -.25s}
+@keyframes hop{50%{transform:translateY(-3px)}}@keyframes st{50%{transform:translateY(-1px)}}
+@media (prefers-reduced-motion: reduce){.hop,.la,.lb{animation:none}}
+</style>
+<g class="hop"><g transform="translate(0 3) scale(${CRAB_SCALE})">${crab}</g>
+<rect class="ln" x="${bx}" y="${by}" width="${boxW - 2}" height="${bh}" rx="6" fill="none" stroke-width="1.5"/>
+<text class="t" x="${bx + 12}" y="${by + 20}" font-family="system-ui,sans-serif" font-size="14" font-weight="700">${text}</text>
+<text x="${bx + boxW - 30}" y="${by + 21}" font-size="15">👍</text></g>
+</svg>`
+}
+
 async function load($: Engine) {
   try {
     const home = (await $.env.get('USERPROFILE')) || (await $.env.get('HOME'))
@@ -58,7 +101,23 @@ export const register: Register = on => {
       return next(e)
     }
 
-    const { Box, Text } = $.ui.resolve(e)
+    const ui = $.ui.resolve(e)
+    const { Box, Text } = ui
+
+    if ('Svg' in ui) {
+      const { Svg } = ui
+      const text: string = '~' + fmt(total) + ' saved'
+      const boxW: number = Math.round(text.length * 8.4 + 52)
+      const W: number = 48 + boxW
+      return (
+        <Svg
+          source={crabSvg(text, boxW, W)}
+          alt={`token-saver: ${text}`}
+          width={W}
+          height={SVG_H}
+        />
+      )
+    }
 
     const label = ' ~' + fmt(total) + ' saved '
     const sign = ['┌' + '─'.repeat(label.length), '│' + label, '└' + '─'.repeat(label.length)]
