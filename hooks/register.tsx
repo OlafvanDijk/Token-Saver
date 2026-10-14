@@ -62,29 +62,27 @@ export const register: Register = on => {
 
     const label = ' ~' + fmt(total) + ' saved '
     const sign = ['┌' + '─'.repeat(label.length) + '┐', '│' + label + '│', '└' + '─'.repeat(label.length) + '┘']
-    const mascot = [' ▐▛███▜▌ ', '▝▜█████▛▘', '  ▘▘ ▝▝  ']
-    const lift = (rows: string[]) => (up ? ['', ...rows] : [...rows, ''])
+    const mascot = [' ▐▛███▜▌ ', '▝▜█████▛▘', '  ▀▀ ▀▀  ']
+    const lift = (rows: string[]) => (up ? [' ', ...rows] : [...rows, ' '])
     const m = lift(mascot)
     const s3 = lift(sign)
-    const thumb = lift(['', '👍', ''])
+    const thumb = lift([' ', '👍', ' '])
 
     return (
-      <Box>
-        <Box flexDirection="column" width={11}>
-          {m.map((row, i) => (
-            <Text key={i} color="#D77757">{row}</Text>
-          ))}
-        </Box>
-        <Box flexDirection="column">
-          {s3.map((row, i) => (
-            <Text key={i} bold>{row}</Text>
-          ))}
-        </Box>
-        <Box flexDirection="column" marginLeft={1}>
-          {thumb.map((row, i) => (
-            <Text key={i}>{row}</Text>
-          ))}
-        </Box>
+      <Box flexDirection="column">
+        {m.map((row, i) => (
+          <Box key={i}>
+            <Box width={11}>
+              <Text color="#D77757">{row}</Text>
+            </Box>
+            <Box width={label.length + 2}>
+              <Text bold>{s3[i]}</Text>
+            </Box>
+            <Box marginLeft={1}>
+              <Text>{thumb[i]}</Text>
+            </Box>
+          </Box>
+        ))}
       </Box>
     )
   })
